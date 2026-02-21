@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const faqs = [
   {
@@ -32,36 +33,40 @@ const faqs = [
   },
 ];
 
-const FAQSection = () => (
-  <section className="bg-section-alt py-16 md:py-24">
-    <div className="container">
-      <p className="text-center font-body text-sm font-semibold uppercase tracking-widest text-secondary">
-        Frequently Asked Questions
-      </p>
-      <h2 className="mt-2 text-center font-display text-3xl font-bold text-foreground md:text-4xl">
-        Got Questions? We Have Answers
-      </h2>
+const FAQSection = () => {
+  const { ref, isVisible } = useScrollAnimation();
 
-      <div className="mx-auto mt-12 max-w-3xl">
-        <Accordion type="single" collapsible className="space-y-3">
-          {faqs.map((faq, i) => (
-            <AccordionItem
-              key={i}
-              value={`faq-${i}`}
-              className="rounded-lg border border-border bg-card px-6 shadow-sm"
-            >
-              <AccordionTrigger className="font-body text-left text-base font-semibold text-foreground hover:no-underline">
-                {faq.q}
-              </AccordionTrigger>
-              <AccordionContent className="font-body text-muted-foreground leading-relaxed">
-                {faq.a}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+  return (
+    <section ref={ref} className="bg-section-alt py-20 md:py-28">
+      <div className={`container transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+        <p className="text-center font-body text-sm font-semibold uppercase tracking-widest text-secondary">
+          Frequently Asked Questions
+        </p>
+        <h2 className="mt-3 text-center font-display text-3xl font-bold text-foreground md:text-4xl lg:text-5xl">
+          Got Questions? We Have Answers
+        </h2>
+
+        <div className="mx-auto mt-14 max-w-3xl">
+          <Accordion type="single" collapsible className="space-y-4">
+            {faqs.map((faq, i) => (
+              <AccordionItem
+                key={i}
+                value={`faq-${i}`}
+                className="rounded-2xl border border-border bg-card px-6 shadow-sm transition-shadow hover:shadow-card"
+              >
+                <AccordionTrigger className="font-body text-left text-base font-semibold text-foreground hover:no-underline py-5">
+                  {faq.q}
+                </AccordionTrigger>
+                <AccordionContent className="font-body text-muted-foreground leading-relaxed pb-5">
+                  {faq.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default FAQSection;
